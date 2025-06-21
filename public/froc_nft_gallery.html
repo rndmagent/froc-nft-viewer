@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FROC NFT Viewer</title>
+  <script src="https://cdn.jsdelivr.net/npm/ethers@6.14.4/dist/ethers.umd.min.js"></script>
+  <style>
+    body { font-family: sans-serif; background: #111; color: #eee; padding: 2em; }
+    .nft { border: 1px solid #444; margin: 1em 0; padding: 1em; background: #222; border-radius: 8px; }
+    img { max-width: 200px; display: block; margin-bottom: 1em; }
+    .attrs { font-size: 0.9em; color: #ccc; }
+  </style>
+</head>
+<body>
+  <h1>🪐 FROC NFT Collection (Base Sepolia)</h1>
+  <p id="status">Connecting...</p>
+  <div id="nfts"></div>
+
+  <script>
+    const contractAddress = "0xfaD6306f551681AAdd83934ACEDf6ad7f7CB87Ef";
+    const abi = [
+      "function tokenURI(uint256 tokenId) view returns (string)",
+      "function nextTokenId() view returns (uint256)"
+    ];
+
+    const provider = new ethers.InfuraProvider("sepolia", "https://sepolia.base.org");
+    const contract = new ethers.Contract(contractAddress, abi, provider);
+
+    async function loadNFTs() {
+      document.getElementById("status").innerText = "Fetching NFTs...";
+      const container = document.getElementById("nfts");
+      try {
+        const total = await contract.nextTokenId();
+        for (let i = 0; i < total; i++) {
+          const uri = await contract.tokenURI(i);
+          const response = await fetch(uri);
+          const data = await response.json();
+
+          const div = document.createElement("div");
+          div.className = "nft";
+
+          const img = document.createElement("img");
+          img.src = data.image;
+
+          const title = document.createElement("h3");
+          title.innerText = data.name;
+
+          const desc = document.createElement("p");
+          desc.innerText = data.description;
+
+          const attrs = document.createElement("div");
+          attrs.className = "attrs";
+          attrs.innerHTML = data.attributes.map(a => `<b>${a.trait_type}</b>: ${a.value}`).join("<br>");
+
+          div.appendChild(img);
+          div.appendChild(title);
+          div.appendChild(desc);
+          div.appendChild(attrs);
+          container.appendChild(div);
+        }
+        document.getElementById("status").innerText = `Loaded ${total} NFT(s)`;
+      } catch (err) {
+        console.error(err);
+        document.getElementById("status").innerText = "Error loading NFTs.";
+      }
+    }
+
+    loadNFTs();
+  </script>
+</body>
+</html>
