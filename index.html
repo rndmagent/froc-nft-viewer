@@ -18,13 +18,13 @@
   <div id="nfts"></div>
 
   <script>
-    const contractAddress = "0xfaD6306f551681AAdd83934ACEDf6ad7f7CB87Ef";
+    const contractAddress = "0xfaD6306f551681AAdd83934ACEdF6ad7f7CB87Ef";
     const abi = [
       "function tokenURI(uint256 tokenId) view returns (string)",
       "function nextTokenId() view returns (uint256)"
     ];
 
-    const provider = new ethers.InfuraProvider("sepolia", "https://sepolia.base.org");
+    const provider = new ethers.JsonRpcProvider("https://sepolia.base.org");
     const contract = new ethers.Contract(contractAddress, abi, provider);
 
     async function loadNFTs() {
