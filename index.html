@@ -6,15 +6,92 @@
   <title>FROC NFT Viewer</title>
   <script src="https://cdn.jsdelivr.net/npm/ethers@6.14.4/dist/ethers.umd.min.js"></script>
   <style>
-    body { font-family: sans-serif; background: #111; color: #eee; padding: 2em; }
-    .nft { border: 1px solid #444; margin: 1em 0; padding: 1em; background: #222; border-radius: 8px; }
-    img { max-width: 200px; display: block; margin-bottom: 1em; }
-    .attrs { font-size: 0.9em; color: #ccc; }
+    body {
+      font-family: "Segoe UI", sans-serif;
+      background: #111;
+      color: #eee;
+      margin: 0;
+      padding: 2em;
+      max-width: 1200px;
+      margin: auto;
+    }
+
+    h1 {
+      font-size: 1.8em;
+      margin-bottom: 0.2em;
+    }
+
+    .desc {
+      font-size: 0.95em;
+      color: #aaa;
+      line-height: 1.5;
+      margin-bottom: 2em;
+    }
+
+    .desc a {
+      color: #4fd1c5;
+      text-decoration: none;
+    }
+
+    #status {
+      font-size: 1em;
+      margin-bottom: 1em;
+      color: #77f584;
+    }
+
+    #nfts {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.5em;
+    }
+
+    .nft {
+      background: #222;
+      border: 1px solid #444;
+      border-radius: 10px;
+      padding: 1em;
+      text-align: center;
+    }
+
+    .nft img {
+      max-width: 100%;
+      border-radius: 6px;
+      margin-bottom: 1em;
+    }
+
+    .nft h3 {
+      margin: 0.2em 0 0.5em;
+      font-size: 1.1em;
+    }
+
+    .nft .attrs {
+      text-align: left;
+      font-size: 0.85em;
+      color: #ccc;
+      line-height: 1.4em;
+      border-top: 1px solid #444;
+      padding-top: 0.8em;
+      margin-top: 0.8em;
+    }
+
+    .nft .attrs b {
+      color: #eee;
+    }
   </style>
 </head>
 <body>
-  <h1>🪐 FROC NFT Collection (Base Sepolia)</h1>
-  <p id="status">Connecting...</p>
+  <h1>🧪 FROC NFT — Dynamic Evolution Test</h1>
+  <div class="desc">
+    This is a test collection of dynamic NFTs on <b>Base Sepolia</b>. <br>
+    Every minute, one random NFT gets the status <code>evolving</code>, shown with a visual overlay.<br>
+    After another minute, it changes one of its attributes. <br>
+    Refresh to observe live evolution.<br><br>
+    View contract: <a href="https://sepolia.basescan.org/address/0xfad6306f551681aadd83934acedf6ad7f7cb87ef" target="_blank">
+      basescan.org →
+    </a>
+  </div>
+
+  <p id="status">Loading...</p>
   <div id="nfts"></div>
 
   <script>
